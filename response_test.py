@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import unittest
 from response import HttpResponse
 from collections import OrderedDict
+
 
 class HttpResponseTest(unittest.TestCase):
     def assertEqualResponse(self, response : HttpResponse, code : int, message : str, body : bytes = b"", content_length : (int | None) = None):
