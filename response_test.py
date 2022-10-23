@@ -32,20 +32,20 @@ class HttpResponseTest(unittest.TestCase):
     #     self.assertEqualResponse(response, 200, "OK")
     #     self.assertIsNone(response.content_length)
 
-    """
-    The `HttpResponse` class should properly process a 200 response with additional headers.
-    """
-    def test_200_user_agent(self):
-        EOL = HttpResponse.EOL
-        response = HttpResponse(
-            "HTTP/1.1 200 OK" + EOL +\
-            "Host: TestServer" + EOL +\
-            EOL +\
-            ""
-        )
-        self.assertEqualResponse(response, 200, "OK")
-        self.assertEqual(response.headers["Host"], "TestServer")
-        self.assertIsNone(response.content_length)
+    # """
+    # The `HttpResponse` class should properly process a 200 response with additional headers.
+    # """
+    # def test_200_user_agent(self):
+    #     EOL = HttpResponse.EOL
+    #     response = HttpResponse(
+    #         "HTTP/1.1 200 OK" + EOL +\
+    #         "Host: TestServer" + EOL +\
+    #         EOL +\
+    #         ""
+    #     )
+    #     self.assertEqualResponse(response, 200, "OK")
+    #     self.assertEqual(response.headers["Host"], "TestServer")
+    #     self.assertIsNone(response.content_length)
 
     # """
     # The `HttpResponse` class should properly process a 200 response with data but no `Content-length` header.
@@ -95,12 +95,13 @@ class HttpResponseTest(unittest.TestCase):
     #     body = b"data"
     #     response = HttpResponse(
     #         "HTTP/1.1 418 I'm a teapot" + EOL +\
-    #         "Content-len: 4" + EOL +\
+    #         # "Content-len: 4" + EOL +\
+    #         "Content-length: 4" + EOL +\
     #         EOL,
     #         body
     #     )
     #     self.assertEqualResponse(response, 418, "I'm a teapot", body, 4)
-    #     self.assertEqual(response.headers["Content-len"], "4")
+    #     self.assertEqual(response.headers["Content-length"], "4")
     #     self.assertEqual(response.content_length, 4)
 
     # """
@@ -261,25 +262,25 @@ class HttpResponseTest(unittest.TestCase):
     #     self.assertEqual(response.headers["Content-length"], "3")
     #     self.assertEqual(response.headers["Special header"], "0")
 
-    # """
-    # The `HttpResponse` class should properly serialize back to bytes from a response string.
-    # """
-    # def test_str_to_bytes(self):
-    #     EOL = HttpResponse.EOL
-    #     text = "HTTP/1.1 200 OK" + EOL +\
-    #         "Host: TestServer" + EOL +\
-    #         "Content-length: 3" + EOL +\
-    #         "Special header: 0" + EOL +\
-    #         EOL
-    #     body = b"abc"
-    #     dump = text.encode("utf-8") + body
-    #     response = HttpResponse(text, body)
-    #     self.assertEqual(response.dump(), dump)
-    #     self.assertEqualResponse(response, 200, "OK", body, 3)
-    #     self.assertEqual(response.content_length, 3)
-    #     self.assertEqual(response.headers["Host"], "TestServer")
-    #     self.assertEqual(response.headers["Content-length"], "3")
-    #     self.assertEqual(response.headers["Special header"], "0")
+    """
+    The `HttpResponse` class should properly serialize back to bytes from a response string.
+    """
+    def test_str_to_bytes(self):
+        EOL = HttpResponse.EOL
+        text = "HTTP/1.1 200 OK" + EOL +\
+            "Host: TestServer" + EOL +\
+            "Content-length: 3" + EOL +\
+            "Special header: 0" + EOL +\
+            EOL
+        body = b"abc"
+        dump = text.encode("utf-8") + body
+        response = HttpResponse(text, body)
+        self.assertEqual(response.dump(), dump)
+        self.assertEqualResponse(response, 200, "OK", body, 3)
+        self.assertEqual(response.content_length, 3)
+        self.assertEqual(response.headers["Host"], "TestServer")
+        self.assertEqual(response.headers["Content-length"], "3")
+        self.assertEqual(response.headers["Special header"], "0")
 
 if __name__ == "__main__":
     unittest.main()
